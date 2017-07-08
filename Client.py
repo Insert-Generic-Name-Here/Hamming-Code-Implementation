@@ -1,9 +1,20 @@
-import socket               # Import socket module
+import socket
+import sys
 
-s = socket.socket()         # Create a socket object
-host = socket.gethostname()  # Get local machine name
-port = 12345                # Reserve a port for your service.
+HOST = "localhost"   # Symbolic name meaning all available interfaces
+PORT = 5000 # Arbitrary non-privileged port
 
-s.connect((host, port))
-print(str(s.recv(1024),))
-s.close ()                   # Close the socket when done
+sct = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+try:
+	sct.connect((HOST,PORT))
+except Exception as e:
+	print e
+	sys.exit(1)
+
+while True:
+    print "[RESPONSE] Server: ", sct.recv(1024)
+    data = raw_input("[REQUEST] Client: ")
+    sct.sendall(data)
+
+sys.exit(0)
