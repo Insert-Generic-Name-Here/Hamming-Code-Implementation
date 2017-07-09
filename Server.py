@@ -1,6 +1,10 @@
-#from sage.all import *
+from random import randint
+from sage.all import *
+import HammingWord
 import socket
 import thread
+import json
+#import pickle
 import sys
  
 HOST = "localhost"   # Symbolic name meaning all available interfaces
@@ -23,18 +27,35 @@ print 'Socket now listening'
 #Function for handling connections. This will be used to create threads
 def clientthread(conn):
     #Sending message to connected client
-    conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
+    conn.sendall('[ACK] Communication\n') #send only takes string
     
-    #infinite loop so that function do not terminate and thread do not end.
-    while True:
-        #Receiving from client
-        data = conn.recv(1024)
-        reply = 'OK...' + data
-        if not data: 
-            break
-        conn.sendall(reply)
- 
-    #came out of loop
+    q = conn.recv(4)
+    #Sending message to connected client
+    conn.sendall('[ACK] q Parameter Transmission\n')
+    r = conn.recv(4)
+    #Sending message to connected client
+    conn.sendall('[ACK] r Parameter Transmission\n')
+    
+    # Creating Same Hamming[n, k] and it's Dual Code [if exists] #
+    C = codes.HammingCode(GF(int(q)), int(r))
+    print "Prime Code: ", C
+    if (C.dual_code() is not None):
+        C = C.dual_code()
+        print "Dual Code: ", C
+        
+    wordErr = conn.recv(1024)
+    wordErr = json.loads(wordErr)
+    print wordErr
+    
+    #Sending message to connected client
+    conn.sendall('[ACK] Message Transmission\n')
+    
+    wordD = [C.decode_to_message(vec, "Syndrome") for vec in wordErr]
+    print  "Decoded Message (from Noised): ", wordD 
+
+
+    conn.sendall('[ACK] Decoding\n')
+    #Closing Communication
     conn.close()
  
 #now keep talking with the client
