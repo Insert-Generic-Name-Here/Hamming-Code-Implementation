@@ -1,20 +1,20 @@
 from random import randint
 
-weight = randint(0,2) # can also be changed
+def adderror(lst , max_weight):
+	error = []
+	weight = randint(0,max_weight)
 
-lst = [0,0,0,0] # example , will be changed
-error = []
+	if max_weight> len(lst):
+		print "wrong input"
+		return 0
 
-# if weight > len(lst):
-# 	.... (what happens if lst is not big enough due to bad input)
+	while len(error)<weight:
+		err = randint(0,len(lst)-1)
+		if err not in error:
+			error.append(err)
 
+	for index in error:
+		lst[index] = str(1 - int(lst[index]))
+	print weight , error , lst
 
-while len(error)<weight:
-	err = randint(0,len(lst)-1)
-	if err not in error:
-		error.append(err)
-
-for index in error:
-	lst[index] = 1 - lst[index]
-
-print weight , error , lst
+	return lst 
