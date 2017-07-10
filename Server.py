@@ -1,6 +1,4 @@
-from random import randint
 from sage.all import *
-import HammingWord
 import socket
 import thread
 import pickle

@@ -1,4 +1,3 @@
-from random import randint
 from sage.all import *
 import HammingWord
 import socket
@@ -29,6 +28,13 @@ except ValueError as vErr:
     print vErr
     sys.exit(0)
 
+print "Minimum Distance: ", C.minimum_distance()
+print "Maximum Error Correction: 1"
+print "Maximum Error Detection: 2"
+# Hamming Codes, both Simple & Extended are SECDED.
+# In other words, they can *detect* *at most* *two* errors (Double Error Detection)
+# but are capable of *only* *correcting* *one* (Single Error Correction)
+    
 if (C.dual_code() is not None):
     C = C.dual_code()
     print "Dual Code: ", C, '\n'

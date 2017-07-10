@@ -1,4 +1,5 @@
 from random import randint
+import sys
 
 def makeWords(q, dim):
     word = [randint(0, q) for i in range(dim)]
@@ -6,7 +7,7 @@ def makeWords(q, dim):
     
     
 def makeNoise(word):
-    weight = randint(0, 1) # can also be changed
+    weight = randint(0, int(sys.argv[3])) # can also be changed
     err = []
     while len(err) < weight:
         e = randint(0,len(word)-1)
