@@ -2,8 +2,7 @@ from random import randint
 from sage.all import *
 import HammingWord
 import socket
-import json
-#import pickle
+import pickle
 import sys
 
 #---------------------------------------------------------------------------------
@@ -49,11 +48,10 @@ try:
 	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Communication
 	print "[REQUEST] Client: Sending Hamming Code Parameters"
 	sct.sendall(sys.argv[1])
-	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] q Transmission
 	sct.sendall(sys.argv[2])
-	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] r Transmission
+	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Code Prm Transmission
 	print "[REQUEST] Client: Sending Message"
-	sct.sendall(json.dumps(str(wordErr)))
+	sct.sendall(pickle.dumps(wordErr))
 	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Msg Transmission
 	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Decoding
 except Exception as sct_exp:
