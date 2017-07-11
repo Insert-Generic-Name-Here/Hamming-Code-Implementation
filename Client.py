@@ -1,5 +1,6 @@
 from sage.all import *
 import HammingWord
+import msginfo
 import socket
 import pickle
 import sys
@@ -47,6 +48,16 @@ word = [vector(HammingWord.makeWords(q-1, dim)) for i in range(20)]
 wordN = [C.encode(vec, enc_method) for vec in word]
 wordErr = [HammingWord.makeNoise(vec) for vec in wordN]
 
+word_chksum = msginfo.sha256checksum(repr(word))
+
+print "Original Message: ", word
+print "Entropy of Original Message: ", msginfo.entropy(msginfo.concatvct(word))
+print "Checksum of Original Message (SHA-256): ", word_chksum
+
+print "\nEncoded Message: ", wordN
+print "Entropy of Encoded Message: ", msginfo.entropy(msginfo.concatvct(wordN))
+print '\n'
+#print "\nNoised Message (The one that will be sent): ", wordErr, "\n"
 #---------------------------------------------------------------------------------
 #-------------------------------SERVER COMMUNICATION------------------------------
 #---------------------------------------------------------------------------------
@@ -56,10 +67,12 @@ try:
 	sct.sendall(sys.argv[1])
 	sct.sendall(sys.argv[2])
 	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Code Prm Transmission
-	print "[REQUEST] Client: Sending Message"
+	print "[REQUEST] Client: Sending Message and Checksum"
 	sct.sendall(pickle.dumps(wordErr))
+	sct.sendall(word_chksum)   
 	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Msg Transmission
-	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Decoding
+	#print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Decoding
+	print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Correct/Incorrect Message    
 except Exception as sct_exp:
 	print "Communication with Server Failed!"
 	print sct_exp

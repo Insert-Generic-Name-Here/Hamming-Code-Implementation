@@ -1,4 +1,5 @@
 from sage.all import *
+import msginfo
 import socket
 import thread
 import pickle
@@ -29,12 +30,12 @@ print 'Socket now listening'
 #Function for handling connections. This will be used to create threads
 def clientthread(conn):
     #Sending message to connected client
-    conn.sendall('[ACK] Communication') #send only takes string
+    conn.sendall('[ACK] Server Connection') #send only takes string
     
     q = conn.recv(4)
     r = conn.recv(4)
     #Sending message to connected client
-    conn.sendall('[ACK] Code Parameter Transmission')
+    conn.sendall('[ACK] Param. Transmission')
     
     # Creating Same Hamming[n, k] and it's Dual Code [if exists] #
     C = codes.HammingCode(GF(int(q)), int(r))
@@ -42,18 +43,29 @@ def clientthread(conn):
     if (C.dual_code() is not None):
         C = C.dual_code()
         print "Dual Code: ", C, "\n"
-         
+        
     tmp = conn.recv(2048)
+    checksum_origin = conn.recv(2048)
+    
     rcv_msg = pickle.loads(tmp)
-    print  "Noised Message: ", rcv_msg, '\n'
+    print "Noised Message: ", rcv_msg, '\n'
     
     #Sending message to connected client
-    conn.sendall('[ACK] Message Transmission')
+    conn.sendall('[ACK] Message/Checksum Transmission')
     
     wordD = [C.decode_to_message(vec, "Syndrome") for vec in rcv_msg]
     print  "Decoded Message (from Noised): ", wordD 
 
-    conn.sendall('[ACK] Decoding')
+    #conn.sendall('[ACK] Decoding Successful')
+    print "Message Checksum (SHA-256): ", checksum_origin
+    checksum_decoded = msginfo.sha256checksum(repr(wordD))
+    
+    if (checksum_origin == checksum_decoded):
+        conn.sendall('[ACK] Msg Received Correctly')
+    else:
+        conn.sendall('[ACK] Msg Received Flawed') 
+    
+    print "\n"
     #Closing Communication
     conn.close()
  
