@@ -2,7 +2,6 @@ from sage.all import *
 import HammingWord
 import msginfo
 import socket
-import pickle
 import sys
 
 #---------------------------------------------------------------------------------
@@ -15,7 +14,7 @@ def ServerConnSendWord(wordN ,word_chksum, noise):
 		print "\nEncoded-Noised Message: ", wordErr
 		print "Entropy of Encoded-Noised Message: ", msginfo.entropy(msginfo.concatvct(wordErr))
 		print "\n[REQUEST] Client: Sending Message and Checksum"
-		sct.sendall(pickle.dumps(wordErr))
+		sct.sendall(msginfo.buildJson(wordErr))
 		sct.sendall(word_chksum)   
 		print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Msg Transmission
 		#print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Decoding
@@ -29,8 +28,12 @@ def ServerConnSendWord(wordN ,word_chksum, noise):
 		print ve
 		sct.close()
 		return
+	except KeyboardInterrupt as KeyErr:
+		print "\nClient Forced Shutdown... Ending Connection..."
+		sct.close()
+		return
 	except Exception as sct_exp:
-		print "Communication with Server Failed!"
+		print "Fatal Error: Communication with Server Failed!"
 		print sct_exp
 
 #---------------------------------------------------------------------------------
@@ -91,6 +94,6 @@ sct.sendall(sys.argv[1])
 sct.sendall(sys.argv[2])
 print "[RESPONSE] Server: ", sct.recv(1024) #[ACK] Code Prm Transmission
 ServerConnSendWord(wordN, word_chksum, int(sys.argv[3]))
-
+    
 print "\n"
 sys.exit(0)

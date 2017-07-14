@@ -1,9 +1,17 @@
 from sage.all import *
 import numpy as np
+import ast
 import hashlib
 
-def sha256checksum(blst):
-    return hashlib.sha256(blst).hexdigest()
+def buildJson(word):
+    json_msg = '{"msg": ['
+    for vct in word:
+        json_msg += "\""+repr(vct)+"\"" + ', '
+    json_msg = json_msg[:-2] + ']}'
+    return json_msg
+
+def json2vct_arr(vct_str):
+    return [vector(ast.literal_eval(vct)) for vct in vct_str]
 
 def concatvct(arr):
     vct = arr[0]
@@ -25,3 +33,6 @@ def entropy(labels): # labels = 0 / 1 vector
     if n_classes <= 1:
         return 0
     return - np.sum(probs * np.log(probs)) / np.log(n_classes)
+
+def sha256checksum(blst):
+    return hashlib.sha256(blst).hexdigest()

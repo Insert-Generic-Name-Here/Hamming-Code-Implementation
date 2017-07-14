@@ -2,7 +2,7 @@ from sage.all import *
 import msginfo
 import socket
 import thread
-import pickle
+import json
 import sys
  
 #---------------------------------------------------------------------------------
@@ -49,7 +49,8 @@ def clientthread(conn):
             tmp = conn.recv(2048)
             checksum_origin = conn.recv(2048)
             
-            rcv_msg = pickle.loads(tmp)
+            rcv_msg = json.loads(tmp)
+            rcv_msg = msginfo.json2vct_arr(rcv_msg['msg'])
             print "Noised Message: ", rcv_msg, '\n'
             
             #Sending message to connected client
@@ -75,8 +76,8 @@ def clientthread(conn):
                 break;
             
             print "\n"
-    except EOFError:
-        print "(EOFError: No more Data to Fetch. Communication Ended.)"
+    except ValueError:
+        print "(ValueError: No more Data to Fetch. Communication Ended.)"
     
     #Closing Communication
     conn.close()
