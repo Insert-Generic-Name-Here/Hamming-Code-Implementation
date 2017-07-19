@@ -1,6 +1,6 @@
 ## Synopsis
 
-This is python socket made for testing the effects of the well known Hamming code. 
+This is python/sage socket made for testing the effects of the well known Hamming code. 
 
 ## Specifics
 
@@ -8,7 +8,7 @@ It's built around two sockets that exchange messages , coded using the aformenti
 
 ## Input and how to use 
 
-To execute the Server Socket run the server script with the parameters of **q r n** where:
+To execute the Server Socket run the sage server script with the parameters of **q r n** where:
 q: The Order of the Galois Field 
 r: The Order of the Hamming Code 
 n: The Maximum Noise to add to the Encoded Messages **NOTE**: the noise is selected randomly, in the integer set [0, n]
