@@ -18,6 +18,6 @@ n: The Maximum Noise to add to the Encoded Messages **NOTE**: the noise is selec
 
 We are students at the University of Piraeus and this code is for a class project. 
 The contributors are :
-*Andreas Tritsarolis
-*Giorgos Theodoropoulos
-*Giorgos Gegiannis
+* Andreas Tritsarolis
+* Giorgos Theodoropoulos
+* Giorgos Gegiannis
