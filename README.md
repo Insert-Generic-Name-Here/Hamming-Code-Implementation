@@ -21,3 +21,12 @@ The contributors are :
 * Andreas Tritsarolis
 * Giorgos Theodoropoulos
 * Giorgos Gegiannis
+* Costas Brazitikos
+
+## External Links
+
+* [Sagemath documentation](http://doc.sagemath.org/html/en/index.html)
+* [Hamming code wiki](https://en.wikipedia.org/wiki/Hamming_code)
+* [Entropy in Information Theory](https://en.wikipedia.org/wiki/Entropy_(information_theory))
+* [Python socket programming](https://docs.python.org/2/howto/sockets.html)
+* [Hashing-Checksums in pyhthon (hashlib)](https://docs.python.org/3/library/hashlib.html#module-hashlib)
